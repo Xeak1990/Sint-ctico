@@ -20,16 +20,17 @@ public class Principal {
 
             String input = texto.toString();
 
-            // Primero: análisis léxico, solo para imprimir tokens
             Lexer lexer = new Lexer(new StringReader(input));
             System.out.println("Tokens léxicos:");
+            
+            int contador = 1; // Contador de tokens
+            
             while (true) {
                 java_cup.runtime.Symbol token = lexer.next_token();
                 if (token.sym == sym.EOF) break;
 
-                // Puedes imprimir el token, su nombre y texto
                 String tokenName = sym.terminalNames[token.sym];
-                System.out.printf("Token: %-20s Texto: %s\n", tokenName, token.value != null ? token.value : "");
+                System.out.printf("Token #%d: %-20s Texto: %s\n", contador++, tokenName, token.value != null ? token.value : "");
             }
 
             // Segundo: análisis sintáctico, nuevo lexer para que no esté vacío
