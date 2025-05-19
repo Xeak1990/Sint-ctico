@@ -1,0 +1,125 @@
+package codigo;
+import java_cup.runtime.*;
+
+parser code {:
+    public static void main(String[] args) throws Exception {
+        System.out.println("Parser básico funcionando");
+    }
+:};
+
+terminal 
+    inicio_programa, fin_programa,
+    palabra_clase, identificador,
+    llave_apertura, llave_cierre,
+    palabra_funcion,
+    tipo_entero, tipo_cadena, tipo_decimal, tipo_booleano,
+    parentesis_apertura, parentesis_cierre,
+    punto_coma,
+    palabra_devolver, igual, operador_suma, operador_resta, 
+    operador_multiplicacion, operador_division,
+    numero, cadena,
+    palabra_si, palabra_sino_si, palabra_sino,
+    operador_relacional,
+    operador_and, operador_or,
+    operador_menor, operador_mayor,
+    operador_menor_igual, operador_mayor_igual,
+    operador_igual,
+    coma;
+
+non terminal programa, clase, cuerpo,
+           declaraciones, declaraciones_opt, declaraciones_simple,
+           metodos_opt, metodos, metodo,
+           sentencias_opt, sentencias, sentencia, expresion, argumentos, 
+           resto_argumentos, condicional, cond_opcional, parametros_opt, parametros, resto_parametros;
+
+precedence left operador_or;
+precedence left operador_and;
+precedence nonassoc operador_relacional;
+precedence left operador_suma, operador_resta;
+precedence left operador_multiplicacion, operador_division;
+precedence left operador_menor_igual, operador_mayor_igual, operador_menor, operador_mayor;
+precedence left operador_igual;
+
+start with programa;
+
+programa ::= inicio_programa clase fin_programa;
+
+clase ::= palabra_clase identificador llave_apertura cuerpo llave_cierre;
+
+cuerpo ::= declaraciones_opt metodos_opt ;
+
+declaraciones_opt ::= declaraciones
+                    | /* vacío */ ;
+
+declaraciones ::= declaraciones_simple declaraciones
+                | declaraciones_simple ;  // Lista no vacía
+
+declaraciones_simple ::= tipo_entero identificador punto_coma
+                       | tipo_cadena identificador punto_coma
+                       | tipo_decimal identificador punto_coma
+                       | tipo_booleano identificador punto_coma ;
+
+metodos_opt ::= metodos
+              | /* vacío */ ;
+
+metodos ::= metodo metodos
+          | metodo ;
+
+metodo ::= palabra_funcion tipo_entero identificador parentesis_apertura parametros_opt parentesis_cierre llave_apertura sentencias_opt llave_cierre
+         | palabra_funcion tipo_cadena identificador parentesis_apertura parametros_opt parentesis_cierre llave_apertura sentencias_opt llave_cierre
+         | palabra_funcion tipo_decimal identificador parentesis_apertura parametros_opt parentesis_cierre llave_apertura sentencias_opt llave_cierre
+         | palabra_funcion tipo_booleano identificador parentesis_apertura parametros_opt parentesis_cierre llave_apertura sentencias_opt llave_cierre ;
+
+parametros_opt ::= parametros
+                 | /* vacío */ ;
+
+parametros ::= tipo_entero identificador resto_parametros
+            | tipo_cadena identificador resto_parametros
+            | tipo_decimal identificador resto_parametros
+            | tipo_booleano identificador resto_parametros ;
+
+resto_parametros ::= coma parametros
+                  | /* vacío */;
+
+sentencias_opt ::= sentencias
+                 | /* vacío */ ;
+
+sentencias ::= sentencia sentencias
+             | sentencia ;
+
+sentencia ::= identificador igual expresion punto_coma
+           | identificador parentesis_apertura argumentos parentesis_cierre punto_coma
+           | condicional
+           | palabra_devolver expresion punto_coma
+           | palabra_devolver punto_coma
+           ;
+
+condicional ::= palabra_si parentesis_apertura expresion parentesis_cierre llave_apertura sentencias_opt llave_cierre cond_opcional ;
+
+cond_opcional ::= palabra_sino_si parentesis_apertura expresion parentesis_cierre llave_apertura sentencias_opt llave_cierre cond_opcional
+                | palabra_sino llave_apertura sentencias_opt llave_cierre
+                | /* vacío */ ;
+
+argumentos ::= expresion resto_argumentos
+             | /* vacío */ ;
+
+resto_argumentos ::= coma argumentos
+                   | /* vacío */ ;
+
+expresion ::= expresion operador_or expresion
+           | expresion operador_and expresion
+           | expresion operador_relacional expresion
+           | expresion operador_suma expresion
+           | expresion operador_resta expresion
+           | expresion operador_multiplicacion expresion
+           | expresion operador_division expresion
+           | expresion operador_menor expresion
+           | expresion operador_mayor expresion
+           | expresion operador_menor_igual expresion
+           | expresion operador_mayor_igual expresion
+           | expresion operador_igual expresion
+           | numero
+           | cadena
+           | identificador
+           | parentesis_apertura expresion parentesis_cierre
+           ;
