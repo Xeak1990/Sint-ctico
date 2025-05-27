@@ -2,8 +2,38 @@ package codigo;
 import java_cup.runtime.*;
 
 parser code {:
+    public static java.util.List<String> errores = new java.util.ArrayList<>();
+
+    @Override
+    public void report_error(String mensaje, Object info) {
+        Symbol sym = (Symbol) info;
+        String error = "Error sintáctico en línea " + (sym.left + 1) + ", columna " + (sym.right + 1) + ": " + mensaje;
+        errores.add(error);
+        System.err.println(error);
+    }
+
     public static void main(String[] args) throws Exception {
         System.out.println("Parser básico funcionando");
+
+        // Abre el archivo o usa System.in si estás haciendo pruebas manuales
+        java_cup.runtime.Scanner lexer = new Lexer(new java.io.InputStreamReader(System.in));
+        Parser parserObj = new Parser(lexer);
+
+        try {
+            parserObj.parse();  // Aquí se hace el análisis
+        } catch (Exception e) {
+            System.err.println("Se encontró una excepción durante el análisis: " + e.getMessage());
+        }
+
+        // Reporte final
+        if (errores.isEmpty()) {
+            System.out.println("¡Análisis sintáctico completado sin errores!");
+        } else {
+            System.out.println("\nSe encontraron " + errores.size() + " errores sintácticos:");
+            for (String err : errores) {
+                System.out.println(" - " + err);
+            }
+        }
     }
 :};
 
@@ -92,6 +122,13 @@ sentencia ::= identificador igual expresion punto_coma
            | condicional
            | palabra_devolver expresion punto_coma
            | palabra_devolver punto_coma
+           | error punto_coma
+               {: 
+                   Symbol err = (Symbol) ((java_cup.runtime.Symbol)stack.peek());
+                   String mensaje = "Error sintáctico recuperado en una sentencia (línea " + (err.left + 1) + ", columna " + (err.right + 1) + ")";
+                   errores.add(mensaje);
+                   System.err.println(mensaje);
+               :}
            ;
 
 condicional ::= palabra_si parentesis_apertura expresion parentesis_cierre llave_apertura sentencias_opt llave_cierre cond_opcional ;
