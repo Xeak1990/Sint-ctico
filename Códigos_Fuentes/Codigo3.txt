@@ -1,0 +1,9 @@
+P_R_O_G  
+clase Calculadora {  
+    funcion entero sumar(entero a, entero b) {  
+        entero resultado;  
+        resultado = a + b;  
+        devolver resultado;  
+    }  
+}  
+E_N_D  
