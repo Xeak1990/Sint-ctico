@@ -133,6 +133,10 @@ sentencia ::= identificador igual expresion punto_coma
            | condicional
            | palabra_devolver expresion punto_coma
            | palabra_devolver punto_coma
+           | tipo_entero identificador punto_coma
+           | tipo_cadena identificador punto_coma
+           | tipo_decimal identificador punto_coma
+           | tipo_booleano identificador punto_coma
            | error punto_coma
                {: 
                    Symbol err = (Symbol) ((java_cup.runtime.Symbol)stack.peek());

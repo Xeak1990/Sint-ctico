@@ -1,0 +1,7 @@
+P_R_O_G
+clase HolaMundo 
+{ funcion cadena mensaje() { 
+devolver "Hola"; 
+      }
+ }
+E_N_D

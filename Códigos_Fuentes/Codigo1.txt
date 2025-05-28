@@ -1,0 +1,16 @@
+P_R_O_G 
+clase Saludo {
+    		funcion cadena 
+generarSaludo(entero hora) {
+        			si (hora < 12) {
+            				devolver "Buenos días";
+        			}
+        			sino si (hora < 18) {
+            				devolver "Buenas tardes";
+        			}
+        			sino {
+            				devolver "Buenas noches";
+       			 }
+ 		   }
+}
+E_N_D
