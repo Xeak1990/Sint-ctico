@@ -343,6 +343,17 @@ public class Parser extends java_cup.runtime.lr_parser {
             }
         }
     }
+    @Override
+    public void unrecovered_syntax_error(Symbol s) {
+        String error;
+        if (s == null || s.left < 0 || s.right < 0) {
+            error = "Error crítico: no se puede recuperar del error. El símbolo es nulo o inválido.";
+        } else {
+            error = "Error crítico en línea " + (s.left + 1) + ", columna " + (s.right + 1) + ": no se puede recuperar del error.";
+        }
+        errores.add(error);
+        System.err.println(error);
+    }
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
