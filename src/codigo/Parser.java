@@ -10,7 +10,7 @@ import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
   */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({"rawtypes", "unused"})
 public class Parser extends java_cup.runtime.lr_parser {
 
  public final Class getSymbolContainer() {
@@ -384,7 +384,7 @@ public class Parser extends java_cup.runtime.lr_parser {
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
-@SuppressWarnings({"rawtypes", "unchecked", "unused"})
+@SuppressWarnings({})
 class CUP$Parser$actions {
   private final Parser parser;
 
